@@ -1,0 +1,24 @@
+﻿<UserControl x:Class="MaindText.View.MTApplycationUser"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Height="198" Width="308">
+    <Grid KeyUp="Grid_KeyUp">   
+        <Button Command="{Binding Path=AddCommand}" Focusable="False" ToolTip="Novo" Cursor="Hand" Height="24" HorizontalAlignment="Left" Margin="8,2,0,0" Name="btAdd" VerticalAlignment="Top" Width="24" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Click="btAdd_Click">
+            <Image Margin="-3"  Source="/MaindText;component/Resources/Document-New-icon.png"/>
+        </Button>        
+        <Button Command="{Binding Path=RemoveCommand}" Focusable="False" ToolTip="Remover" Cursor="Hand" Height="24" HorizontalAlignment="Left" Margin="38,2,0,0" Name="btRemove" VerticalAlignment="Top" Width="24" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}">
+            <Image Margin="-3" Source="/MaindText;component/Resources/Document-Delete-icon.png" />
+        </Button>
+        
+        <Button Command="{Binding Path=ToBackCommand}" Focusable="False" Margin="0,0,55,5" Cursor="Hand" ToolTip="Anterior" Name="igBack" Height="18" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="21" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}">
+            <Image Margin="-3" Source="/MaindText;component/Resources/arrow-180-icon.png" />
+        </Button>
+        <Button Command="{Binding Path=ToNextCommand}" Focusable="False" VerticalAlignment="Bottom" Width="21" Height="18" Cursor="Hand" ToolTip="Proximo" HorizontalAlignment="Right" Margin="0,0,4,5" Name="igFront" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}">
+            <Image Margin="-3" Source="/MaindText;component/Resources/arrow-icon.png"/>
+        </Button>
+
+        <TextBox Margin="2.5,28,2.5,26" Name="tbSearch" TextWrapping="Wrap" IsEnabled="{Binding Path=TextIsEnabled}" Text="{Binding Path=TextApplycation, Mode=TwoWay}" AcceptsReturn="True" AcceptsTab="True"/>
+        <Label Height="28" Name="lbSearchDesc" VerticalAlignment="Bottom" Margin="0,0,81,0" Content="{Binding Path=CountApplyToShow}"/>
+        <Label Height="27" HorizontalAlignment="Right" Margin="0,0,25,0" VerticalAlignment="Bottom" HorizontalContentAlignment="Center" Name="lbNumb" Content="{Binding Path=SelIndexToShow}" Width="30" />
+    </Grid>
+</UserControl>

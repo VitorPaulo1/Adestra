@@ -1,0 +1,251 @@
+﻿<Window x:Class="MaindText.View.MTMainView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:apply="clr-namespace:MaindText.View"
+    Title="Adestra" Height="326" Width="745" WindowStartupLocation="CenterScreen" KeyUp="Window_KeyUp" Closed="Window_Closed">
+    <Window.Resources>
+        <Style TargetType="ListViewItem">
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        </Style>
+        <GroupStyle x:Key="styGroup">
+            <GroupStyle.ContainerStyle>
+                <Style TargetType="{x:Type GroupItem}">
+                    <Setter Property="Margin" Value="0,0,0,5"/>
+                    <Setter Property="Background" Value="LightGray"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type GroupItem}">
+                                <Expander IsExpanded="True" Background="LightBlue">
+                                    <Expander.Header>
+                                        <DockPanel>
+                                            <TextBlock FontWeight="Bold" Text="{Binding Path=Name}" Margin="5,0,0,0" Width="150"/>
+                                            <TextBlock FontWeight="Bold" Text="{Binding Path=ItemCount}"/>
+                                            <TextBlock FontWeight="Bold" Text=" textos"/>
+                                        </DockPanel>
+                                    </Expander.Header>
+                                    <Expander.Content>    
+                                        <Grid Margin="2,0,2,3" Background="White">
+                                            <ItemsPresenter />
+                                        </Grid>                                        
+                                    </Expander.Content>
+                                </Expander>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </GroupStyle.ContainerStyle>
+        </GroupStyle>
+        
+        <Style x:Key="alternatingListViewItemStyle" TargetType="{x:Type ListViewItem}">
+            <Style.Triggers>
+                <MultiTrigger>
+                    <MultiTrigger.Conditions>
+                        <Condition Property="ItemsControl.IsMouseOver" Value="False"/>
+                        <Condition Property="ListViewItem.IsSelected" Value="False"/>
+                        <Condition Property="ItemsControl.AlternationIndex" Value="0"/>
+                    </MultiTrigger.Conditions>
+                    <Setter Property="Background" Value="White"></Setter>
+                </MultiTrigger>
+                <MultiTrigger>
+                    <MultiTrigger.Conditions>
+                        <Condition Property="ItemsControl.IsMouseOver" Value="False"/>
+                        <Condition Property="ListViewItem.IsSelected" Value="False"/>
+                        <Condition Property="ItemsControl.AlternationIndex" Value="1"/>
+                    </MultiTrigger.Conditions>
+                    <Setter Property="Background" Value="Lavender"></Setter>
+                </MultiTrigger>               
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+
+    <Grid x:Name="MainGrid">
+        <Button Height="23" HorizontalAlignment="Left" Margin="12,12,0,0" Name="btAdd" VerticalAlignment="Top" Width="75" Click="btAdd_Click">Adicionar</Button>
+        <Button Height="23" Margin="0,12,283,0" Name="btTest" VerticalAlignment="Top" Click="btTest_Click" HorizontalAlignment="Right" Width="75">Proximo Teste</Button>
+        <ListView AlternationCount="2" ItemContainerStyle="{StaticResource alternatingListViewItemStyle}" Margin="12,41,12,30" Name="lvTexts" IsSynchronizedWithCurrentItem="True" ItemsSource="{Binding  DgCollection, Mode=OneWay}">
+            <ListView.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Adicionar" Click="btAdd_Click"/>
+                    <MenuItem Header="Editar" Click="btEdit_Click"/>
+                    <MenuItem Header="Remover" Click="btRemove_Click"/>
+                    <Separator/>
+                    <MenuItem Header="Teste" Click="btTestSelected_Click"/>
+                    <MenuItem Header="Atualizar" Click="btAtualize_Click"/>
+                </ContextMenu>
+            </ListView.ContextMenu>
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Width="215">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <TextBlock x:Name="text2" Height="20"  Text="{Binding LabelToTest}" />
+                                </Grid>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                        <GridViewColumn.Header>
+                            <GridViewColumnHeader Content="Texto" Name="heText" Click="header_Click" />
+                        </GridViewColumn.Header>
+                    </GridViewColumn>
+
+                    <GridViewColumn Width="45" x:Name="ColApply">
+                        <GridViewColumn.Header>
+                            <GridViewColumnHeader Content="Aplic." Name="heApply" Click="header_Click" ToolTip="Aplicação"/>
+                        </GridViewColumn.Header>
+                        <GridViewColumn.CellTemplate>                            
+                            <DataTemplate>                                
+                                <Grid Name="GridAp">                                     
+                                    <Button Name="DocApply" Width="16" HorizontalAlignment="Left"  IsEnabled="{Binding Path=ApplyIsEnabled}" ToolTip="{Binding Path=CountApplyToShow}" Tag="{Binding Path=MgrApply}" Margin="0,0,0,0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Click="DocApply_Click">
+                                        <Grid>
+                                            <Image Margin="-3,-3,-3,-3" Height="18">
+                                                <Image.Style>
+                                                    <Style>
+                                                        <Setter Property="Image.Source" Value="/MaindText;component/Resources/Document-icon.png" />
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding Path=ApplyIsEnabled}" Value="False">
+                                                                <Setter Property="Image.Opacity" Value="0.5" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Image.Style>
+                                            </Image>
+                                        </Grid>
+                                    </Button>
+                                    <TextBlock Text="{Binding Path=MgrApply.LstApply.Count}" Margin="20,0,0,0" HorizontalAlignment="Left" Width="20"/>
+                                </Grid>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+
+                    <GridViewColumn Width="25">
+                        <GridViewColumn.Header>
+                            <GridViewColumnHeader Content="Ati." Name="heEnabled" ToolTip="Ativado"/>
+                        </GridViewColumn.Header>
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <CheckBox x:Name="cbEnabled" Content="" Unchecked="cbEnabled_Unchecked" Checked="cbEnabled_Checked" IsChecked="{Binding TestIsEnabled, Mode=TwoWay}" />
+                                </Grid>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    
+                    <GridViewColumn Width="120" DisplayMemberBinding="{Binding Periode}">
+                        <GridViewColumn.Header>
+                            <GridViewColumnHeader Content="Ultimo Teste" Name="heDate" Click="header_Click" />
+                        </GridViewColumn.Header>
+                    </GridViewColumn>
+
+                    <GridViewColumn Width="30" DisplayMemberBinding="{Binding PositToShow}">
+                        <GridViewColumn.Header>
+                            <GridViewColumnHeader Name="hePosition" Click="header_Click">
+                                <Image Source="/MaindText;component/Resources/brain.png"  Height="16"/>
+                            </GridViewColumnHeader>
+                        </GridViewColumn.Header>
+                    </GridViewColumn>
+                    <GridViewColumn Width="240" x:Name="ColProgress">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Grid Width="{Binding ElementName=ColProgress, Path=Width}">
+                                    <ProgressBar  Maximum="100" Value="{Binding ScoreShadle, Mode=OneWay}" Margin="1,0,14,0" Height="15" Foreground="White"/>
+                                    <ProgressBar Background="Transparent"  Maximum="100" Value="{Binding Score, Mode=OneWay}" Margin="1,0,14,0" Height="15" Foreground="{Binding Color}" />
+                                    <TextBlock x:Name="textBlock" Text="{Binding Score, Mode=OneWay}" Margin="1,0,14,0" HorizontalAlignment="Center" />
+                                </Grid>                                
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                        <GridViewColumn.Header>
+                            <GridViewColumnHeader Content="Progresso" Name="heProgress" Click="header_Click" />
+                        </GridViewColumn.Header>
+                    </GridViewColumn>
+                    
+                    <GridViewColumn Width="50" x:Name="ColNemTest">
+                        <GridViewColumn.Header>
+                            <GridViewColumnHeader Content="# Testes" Name="heNumTest" Click="header_Click" />
+                        </GridViewColumn.Header>
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Grid Width="{Binding ElementName=ColNemTest, Path=Width}">
+                                    <TextBlock Text="{Binding TestCountToShow}" HorizontalAlignment="Center" Margin="1,0,14,0"/>
+                                </Grid>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>   
+                    
+                    <GridViewColumn Width="50" x:Name="ColAnsuersCorrects">
+                        <GridViewColumn.Header>
+                            <GridViewColumnHeader Content="Corretos" Name="heAnsuersCorrects" Click="header_Click" />
+                        </GridViewColumn.Header>
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Grid Width="{Binding ElementName=ColAnsuersCorrects, Path=Width}">
+                                    <TextBlock Text="{Binding AnsuersCorrects}" HorizontalAlignment="Center" Margin="1,0,14,0"/>
+                                </Grid>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Width="50" x:Name="ColAnsuersWrongs">
+                        <GridViewColumn.Header>
+                            <GridViewColumnHeader TextBlock.TextAlignment="Center" Content="Errados" Name="heAnsuersWrongs" Click="header_Click" />
+                        </GridViewColumn.Header>
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Grid Width="{Binding ElementName=ColAnsuersWrongs, Path=Width}">
+                                    <TextBlock Text="{Binding AnsuersWrongs}" HorizontalAlignment="Center" Margin="1,0,14,0"/>
+                                </Grid>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Width="70" x:Name="ColPercentsWrongs">  
+                        <GridViewColumn.Header>
+                            <GridViewColumnHeader TextBlock.TextAlignment="Center" Content="% Errados" Name="hePercentsWrongs" Click="header_Click" />
+                        </GridViewColumn.Header>
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Grid Width="{Binding ElementName=ColPercentsWrongs, Path=Width}">
+                                    <!--<ProgressBar  Maximum="100" Value="{Binding PercentsWrongs, Mode=OneWay}" Margin="1,0,14,0" Height="15" Opacity="0.6" />-->
+                                    <TextBlock x:Name="textBlock" Text="{Binding PercentsWrongsToShow}" HorizontalAlignment="Center" Margin="1,0,14,0"/>
+                                </Grid>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Width="70" x:Name="ColCreated">
+                        <GridViewColumn.Header>
+                            <GridViewColumnHeader TextBlock.TextAlignment="Center" Content="Criado em..." Name="heCreated" Click="header_Click" />
+                        </GridViewColumn.Header>
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Grid Width="{Binding ElementName=ColCreated, Path=Width}">
+                                    <TextBlock Text="{Binding Path=CreatedToShow}" HorizontalAlignment="Center" Margin="1,0,14,0"/>
+                                </Grid>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <Button Height="23" HorizontalAlignment="Right" Margin="0,12,12,0" Name="btSettings" VerticalAlignment="Top" Width="75" Click="btSettings_Click">Configurações</Button>
+        <Label Height="28" HorizontalAlignment="Left" Margin="12,0,0,0" Name="lbTimer" VerticalAlignment="Bottom" Width="178">Temporizador desabilitado.</Label>
+        <Label Height="28" HorizontalAlignment="Right" Margin="0,0,12,0" Name="lbCount" VerticalAlignment="Bottom" Width="263" HorizontalContentAlignment="Right">Nenhum teste em espera.</Label>
+        <Button Height="23" Margin="174,12,0,0" Name="btRemove" VerticalAlignment="Top" Click="btRemove_Click" HorizontalAlignment="Left" Width="75">Remover</Button>
+        <Button Height="23" Margin="93,12,0,0" Name="btEdit" VerticalAlignment="Top" Click="btEdit_Click" HorizontalAlignment="Left" Width="75">Editar</Button>
+        <Button Height="23" HorizontalAlignment="Right" Margin="0,12,202,0" Name="btAtualize" VerticalAlignment="Top" Width="75" Click="btAtualize_Click">Atualizar</Button>
+        <Label Height="28" Margin="233,0,0,0" Name="lbPatchCount" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="144">Count</Label>
+        <ToggleButton Height="23" HorizontalAlignment="Right" Margin="0,12,121,0" Name="tbtCategorized" VerticalAlignment="Top" Width="75" Checked="tbtCategorized_Checked" Unchecked="tbtCategorized_Unchecked">Categorizar</ToggleButton>
+        <!--<Button Height="23" HorizontalAlignment="Left" Margin="316,12,0,0" Name="btOpenEstude" VerticalAlignment="Top" Width="91" Click="btOpenEstude_Click">Lista de Estudos</Button>-->
+
+        <Popup Name="CurrentPopup"
+            AllowsTransparency="True"
+            PopupAnimation="Slide"
+            Width="314"  
+            StaysOpen="False"
+            HorizontalOffset="-5">
+            <Border Background="LightYellow" BorderBrush="#888" BorderThickness="1" CornerRadius="5">
+                <Grid>                    
+                    <Button ToolTip="Fechar" Cursor="Hand" Height="24" HorizontalAlignment="Right" Margin="0,2,3,0" Name="btClose" VerticalAlignment="Top" Width="24" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Click="btClose_Click">
+                        <Image Margin="-3" Source="/MaindText;component/Resources/Button-Delete-icon.png"/>
+                    </Button>
+                    <apply:MTApplycationUser x:Name="userApplyForm"  Height="170" VerticalAlignment="Top"  />
+                </Grid>
+            </Border>
+        </Popup>
+    </Grid>
+</Window>

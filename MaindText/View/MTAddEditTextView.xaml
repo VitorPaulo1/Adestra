@@ -1,0 +1,12 @@
+﻿<Window x:Class="MaindText.View.MTAddEditTextView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:map="clr-namespace:MaindText.View"
+    Title="Adicionar texto"  Height="438" Width="354" MinHeight="438" MinWidth="354" ShowInTaskbar="False" WindowStartupLocation="CenterOwner" Activated="Window_Activated">
+    <Grid x:Name="GridMain">
+        <RichTextBox Margin="12,12,12,205" Name="tbText" Height="183" Width="308" />
+        <map:MTMapUser x:Name="_Map" Margin="10,0,10,34" Height="174" VerticalAlignment="Bottom" />
+        <Button Height="23" Margin="0,0,92,5" Name="btAdd" VerticalAlignment="Bottom" Click="btAdd_Click" HorizontalAlignment="Right" Width="75">Adicionar</Button>
+        <Button Height="23" Margin="0,0,12,5" Name="btCancel" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="74" Click="btCancel_Click">Cancelar</Button>
+    </Grid>
+</Window>

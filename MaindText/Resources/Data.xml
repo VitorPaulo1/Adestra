@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<MaindText>
+  <Settings>
+    <AutoTest Enabled="True" Interval="60"/>
+  </Settings>
+  <Patches>
+    <Patch Adress="Sal 83:18"  Created="5/1/2008 6:32:06 PM">
+      <Test Date="5/1/2008 6:32:06 PM" WasCorrect="True"/>
+    </Patch>
+    <Patch Adress="Mat 24:14" Created="5/1/2008 6:32:06 PM">
+      <Test Date="6/1/2008 6:32:06 PM" WasCorrect="False"/>
+    </Patch>
+  </Patches>
+</MaindText>
